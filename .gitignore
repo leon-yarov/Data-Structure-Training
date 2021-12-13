@@ -1,3 +1,6 @@
 .exe
 .json
 .vscode
+CMakeLists.txt
+.cmake-build-debug
+.txt
