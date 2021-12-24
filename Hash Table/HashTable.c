@@ -63,9 +63,9 @@ int hash(char *str, HashTable *ht) {
 //return - 1 if successful, 0 if not
 int insert(HashTable *ht, char *str) {
     if (str == NULL || search(ht, str)) return 0;
-    HashTableElement *t = &(ht->hashTable[hash(str, ht)]);
-    t->chain = addToStart(t->chain, str);
-    if (t->key == -1) t->key = hash(str, ht);
+    HashTableElement *t = &(ht->hashTable[hash(str, ht)]);  //Get the hash table element
+    t->chain = addToStart(t->chain, str); //add the string to the chain
+    if (t->key == -1) t->key = hash(str, ht); //if key is not defined, set it to the hash value
     return 1;
 }
 
@@ -76,8 +76,8 @@ int insert(HashTable *ht, char *str) {
 //Return 1 if the element was deleted, 0 if it wasn't
 int deleteElement(HashTable *ht, char *str) {
     if (str == NULL || !search(ht, str)) return 0;
-    HashTableElement *t = &(ht->hashTable[hash(str, ht)]);
-    DeleteElement(t->chain, str);
+    HashTableElement *t = &(ht->hashTable[hash(str, ht)]); //Get the element
+    DeleteElement(t->chain, str); //Delete the element in the chain
     return 1;
 }
 
@@ -87,7 +87,7 @@ int deleteElement(HashTable *ht, char *str) {
 //Return 1 if found, 0 if not
 int search(HashTable *ht, char *str) {
     if (str == NULL) return 0;
-    HashTableElement *t = &(ht->hashTable[hash(str, ht)]);
+    HashTableElement *t = &(ht->hashTable[hash(str, ht)]); //get HashTable entry
     return isInList(t->chain, str);
 }
 
