@@ -31,7 +31,7 @@ HashTable *initTable(int tableSize, int hashFunction) {
     if (table == NULL) exit(1);
     table->tableSize = tableSize;
     table->hashFunction = hashFunction;
-    table->hashTable = (HashTableElement *) (sizeof(HashTableElement) * tableSize);
+    table->hashTable = (HashTableElement *) malloc(sizeof(HashTableElement) * tableSize);
     if (table->hashTable == NULL) exit(1);
     for (int i = 0; i < tableSize; i++) {
         table->hashTable[i].key = -1;
@@ -77,7 +77,7 @@ int insert(HashTable *ht, char *str) {
 int deleteElement(HashTable *ht, char *str) {
     if (str == NULL || !search(ht, str)) return 0;
     HashTableElement *t = &(ht->hashTable[hash(str, ht)]); //Get the element
-    DeleteElement(t->chain, str); //Delete the element in the chain
+    free(DeleteElement(t->chain, str)); //Delete the element in the chain
     return 1;
 }
 

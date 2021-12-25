@@ -22,3 +22,7 @@ LinkedList *FreeList(LinkedList *);
 LinkedList *DeleteElement(LinkedList *, char *);
 
 int isInList(LinkedList *, char *);
+
+
+//Custom Functions
+LinkedList *MergeLists(LinkedList *, LinkedList *);

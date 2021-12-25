@@ -40,7 +40,7 @@ LinkedList *addSpaceCheck(HashTable *dictionaryTable, char *word) {
             addToStart(list, first); //add the first half to the list if it is in the dictionary
         }
         if (isWordInDictionary(dictionaryTable, second) && strcmp(second, word) != 0) {
-            addToStart(list, second); //add the second half to the list if it is in the dictionary
+            list = addToStart(list, second); //add the second half to the list if it is in the dictionary
         }
     }
     free(first); //free mem
@@ -61,7 +61,7 @@ LinkedList *replaceCharacterCheck(HashTable *dictionaryTable, char *word) {
             char c = 'a' + j; //get the 'a' to 'z' letters
             temp[i] = c; //replace letter at index i
             if (isWordInDictionary(dictionaryTable, temp) && strcmp(temp, word) != 0) {
-                addToStart(list, temp); //add the word to the list if it is in the dictionary
+                list = addToStart(list, temp); //add the word to the list if it is in the dictionary
             }
         }
     }
@@ -81,14 +81,14 @@ LinkedList *deleteCharacterCheck(HashTable *dictionaryTable, char *word) {
         int idxToDel = i; //set the index to delete
         memmove(&temp[idxToDel], &temp[idxToDel + 1], strlen(temp) - idxToDel); //move the letters in mem
         if (isWordInDictionary(dictionaryTable, temp) && strcmp(temp, word) != 0) {
-            addToStart(list, temp); //add the word to the list if it is in the dictionary
+            list = addToStart(list, temp); //add the word to the list if it is in the dictionary
         }
         free(temp); //free mem
     }
     return list;
 }
 
-//add char check [1]
+//add char check [4]
 //word - word to check
 //dictionaryTable - hashtable to check
 //returns list of suggested words
@@ -99,9 +99,9 @@ LinkedList *addCharacterCheck(HashTable *dictionaryTable, char *word) {
         for (int j = 0; j < 26; ++j) { //for every letter in the alphabet
             strncpy(temp, word, i); //copy the word until the index i
             temp[i] = 'a' + j; //add the letter to the index i
-            strcat(temp, word + i); //append the rest of the word
+            strncpy(temp + i + 1, word + i, strlen(word) - i + 1); //append the rest of the word
             if (isWordInDictionary(dictionaryTable, temp) && strcmp(temp, word) != 0) {
-                addToStart(list, temp); //add the word to the list if it is in the dictionary
+                list = addToStart(list, temp); //add the word to the list if it is in the dictionary
             }
         }
     }
@@ -109,3 +109,41 @@ LinkedList *addCharacterCheck(HashTable *dictionaryTable, char *word) {
     return list;
 }
 
+//switch adj check [5]
+//dictionaryTable - hashtable to check
+//word - word to check
+//returns list of suggested words
+LinkedList *switchAdjacentCharacterCheck(HashTable *dictionaryTable, char *word) {
+    LinkedList *list = NULL;
+    char *temp = string(strlen(word));
+    for (int i = 0; i < strlen(word) - 1; i++) { //for every letter but the last
+        strcpy(temp, word); //copy the word
+        char c = temp[i]; //get the letter at index i
+        temp[i] = temp[i + 1]; //replace the letter at index i with the letter at index i + 1
+        temp[i + 1] = c; //replace the letter at index i + 1 with the letter at index i
+        if (isWordInDictionary(dictionaryTable, temp) && strcmp(temp, word) != 0) {
+            list = addToStart(list, temp); //add the word to the list if it is in the dictionary
+        }
+    }
+    free(temp);
+    return list;
+}
+
+LinkedList *getWordSuggestions(HashTable *dictionaryTable, char *word) {
+    LinkedList *list = NULL;
+    if (word == NULL || strlen(word) == 0) {
+        return NULL;
+    }
+    int checks = 5;
+    LinkedList *suggestions[] = {
+            replaceCharacterCheck(dictionaryTable, word),
+            deleteCharacterCheck(dictionaryTable, word),
+            addCharacterCheck(dictionaryTable, word),
+            switchAdjacentCharacterCheck(dictionaryTable, word),
+            switchAdjacentCharacterCheck(dictionaryTable, word)
+    };
+    for (int i = 0; i < checks; ++i) {
+        list = MergeLists(list, suggestions[i]);
+    }
+    return list;
+}
