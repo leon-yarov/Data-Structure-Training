@@ -1,6 +1,8 @@
 #include "LinkedList.h"
 
-
+//Build a linked list node
+//data: the data to be stored in the node
+//return: the node
 LinkedList *BuildNode(char *data) {
     LinkedList *temp = (LinkedList *) malloc(sizeof(LinkedList));
     if (temp == NULL) {
@@ -13,12 +15,15 @@ LinkedList *BuildNode(char *data) {
     return temp;
 }
 
+//Insert a node at the end of the linked list
+//n: the head of the linked list
+//s: the data to be stored in the node
+//return: the head of the linked list
 LinkedList *addToEnd(LinkedList *n, char *s) {
-//    printf("Adding '%s' to the start of the list\n", s);
-if (n == NULL) {
-    return BuildNode(s);
-}
-LinkedList * temp = n;
+    if (n == NULL) {
+        return BuildNode(s);
+    }
+    LinkedList *temp = n;
     while (temp->next != NULL) {
         temp = temp->next;
     }
@@ -26,11 +31,11 @@ LinkedList * temp = n;
     return n;
 }
 
+//Free the linked list memory
+//l: the head of the linked list
 LinkedList *FreeList(LinkedList *l) {
+    if (l == NULL) { return NULL; }
     printf("Freeing the list that starts with '%s'\n", l->data);
-    if (l == NULL) {
-        return NULL;
-    }
     LinkedList *temp = l;
     while (temp != NULL) {
         LinkedList *next = temp->next;
@@ -40,6 +45,10 @@ LinkedList *FreeList(LinkedList *l) {
     return NULL;
 }
 
+//Delete a node from the linked list
+//ls: the head of the linked list
+//str: the data of the node to be deleted
+//return: the head of the linked list
 LinkedList *DeleteElement(LinkedList *ls, char *str) {
     printf("Deleting '%s' from the list\n", str);
     if (strcmp(ls->data, str) == 0)
@@ -56,9 +65,13 @@ LinkedList *DeleteElement(LinkedList *ls, char *str) {
         prev = temp;
         temp = temp->next;
     }
-    return NULL;
+    return ls;
 }
 
+//Check if the item in list
+//ls: the head of the linked list
+//str: the data to be checked
+//return: 1 if the item is in the list, 0 otherwise
 int isInList(LinkedList *ls, char *str) {
     if (ls == NULL)
         return 0;
@@ -72,8 +85,11 @@ int isInList(LinkedList *ls, char *str) {
     return 0;
 }
 
+//Merge lists without duplicates
+//l1: the head of the first list
+//l2: the head of the second list
+//return: the head of the merged list
 LinkedList *MergeLists(LinkedList *ls1, LinkedList *ls2) {
-    //Merge lists without duplicates
     if (ls1 == NULL)
         return ls2;
     LinkedList *temp = ls1;
@@ -90,6 +106,8 @@ LinkedList *MergeLists(LinkedList *ls1, LinkedList *ls2) {
     return ls1;
 }
 
+//Print the linked list
+//l: the head of the linked list
 void PrintList(LinkedList *ls) {
     LinkedList *temp = ls;
     while (temp != NULL) {

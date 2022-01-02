@@ -16,7 +16,9 @@ int accumulateStringHashFunction(char *str) {
     return (int) (str[0]) + accumulateStringHashFunction(str + 1);
 }
 
-//TODO: figure out what to do with the return value
+//Sum all the letters and the ASCII of the first letter
+//str - string
+//Return ASCII sum of all letters + algorithm
 int improvedHashFunction(char *str) {
     int sum = 0, n = strlen(str);
     for (int i = 0; i < n; i++) {
@@ -25,7 +27,10 @@ int improvedHashFunction(char *str) {
     return sum;
 }
 
-
+//Hash table constructor
+//tableSize - size of the table
+//hashFunction - function to hash the string
+//Return - pointer to the hash table
 HashTable *initTable(int tableSize, int hashFunction) {
     HashTable *table = malloc(sizeof(HashTable));
     if (table == NULL) exit(1);

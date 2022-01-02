@@ -7,7 +7,7 @@ char *string(int length) {
 }
 
 
-//
+//Unused function
 int wordSpellingChecker(HashTable *dictionaryTable) {
     LinkedList *list = NULL;
 
@@ -32,10 +32,12 @@ int isWordInDictionary(HashTable *dictionaryTable, char *word) {
 LinkedList *addSpaceCheck(HashTable *dictionaryTable, char *word) {
 
     LinkedList *list = NULL;
-    char *first = string(strlen(word)), *second = string(strlen(word)), *merge = string(2*strlen(word));
+    char *first = string(strlen(word)), *second = string(strlen(word)), *merge = string(2 * strlen(word));
     for (int i = 1; i < strlen(word); i++) {
-        strncpy(first, word, i); first[i] ='\0';//get the first half of the word
-        strncpy(second, word + i, strlen(word) - i); second[strlen(word) - i] = '\0'; // get the second half of the word
+        strncpy(first, word, i);
+        first[i] = '\0';//get the first half of the word
+        strncpy(second, word + i, strlen(word) - i);
+        second[strlen(word) - i] = '\0'; // get the second half of the word
         if (isWordInDictionary(dictionaryTable, first) && isWordInDictionary(dictionaryTable, second)) {
             strcpy(merge, first);
             strcat(merge, " ");
@@ -136,7 +138,7 @@ LinkedList *getWordSuggestions(HashTable *dictionaryTable, char *word) {
     }
     int checks = 5;
     LinkedList *suggestions[] = {
-            addSpaceCheck(dictionaryTable,word),
+            addSpaceCheck(dictionaryTable, word),
             replaceCharacterCheck(dictionaryTable, word),
             deleteCharacterCheck(dictionaryTable, word),
             addCharacterCheck(dictionaryTable, word),

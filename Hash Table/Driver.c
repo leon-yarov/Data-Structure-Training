@@ -8,14 +8,17 @@ void printSpellingSuggestions(SpellingSuggestion *suggestions);
 
 SpellingSuggestion *spellingCheck(char *text);
 
-void FreeSpelling(SpellingSuggestion*);
-#define  MAX_WORD_LENGTH  30
+void FreeSpelling(SpellingSuggestion *);
+
+#define MAX_WORD_LENGTH  30
+#define HASH 1
+#define PATH "I:\\CLion Projects\\Data-Structure-Training\\Hash Table\\dictionary.txt"
 
 int main() {
     char *text = "iam afraid youare about to become teh immexdiate pst president of teh eing alive club ha ha glados";
     SpellingSuggestion *spellingSuggestions = spellingCheck(text);
     printSpellingSuggestions(spellingSuggestions);
-//    FreeSpelling(spellingSuggestions);
+    FreeSpelling(spellingSuggestions);
     return 0;
 }
 
@@ -23,8 +26,9 @@ int main() {
 // text: input text
 // Return a list of suggestions for each word
 SpellingSuggestion *spellingCheck(char *text) {
-    HashTable *ht = initTable(6000, 1); //create a table with 6000 entries
-    if (parseWordsToTable("C:\\Users\\dori6\\CLionProjects\\Data-Structure-Training\\Hash Table\\dictionary.txt", ht) == 0) {
+    HashTable *ht = initTable(6000, HASH); //create a table with 6000 entries
+    if (parseWordsToTable(PATH, ht) ==
+        0) {
         printf("Error: File not found\n");
         return NULL;
     }
@@ -38,7 +42,7 @@ SpellingSuggestion *spellingCheck(char *text) {
             word = strtok(NULL, " ");
             continue;
         }
-        char* copy = (char*)malloc(strlen(word) + 1); //copy the word
+        char *copy = (char *) malloc(strlen(word) + 1); //copy the word
         strcpy(copy, word);
         printf("Working on: %s\n", copy);
         used = addToEnd(used, word); //add the word to the used list
@@ -94,8 +98,8 @@ void printSpellingSuggestions(SpellingSuggestion *suggestions) {
 }
 
 //Free all memory allocated for the suggestions
-void FreeSpelling(SpellingSuggestion* s){
-    if(s==NULL) return;
+void FreeSpelling(SpellingSuggestion *s) {
+    if (s == NULL) return;
     FreeSpelling(s->next);
     free(s->originalWord);
     FreeList(s->suggestions);
