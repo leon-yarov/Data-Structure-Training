@@ -64,7 +64,7 @@ int hash(char *str, HashTable *ht) {
 int insert(HashTable *ht, char *str) {
     if (str == NULL || search(ht, str)) return 0;
     HashTableElement *t = &(ht->hashTable[hash(str, ht)]);  //Get the hash table element
-    t->chain = addToStart(t->chain, str); //add the string to the chain
+    t->chain = addToEnd(t->chain, str); //add the string to the chain
     if (t->key == -1) t->key = hash(str, ht); //if key is not defined, set it to the hash value
     return 1;
 }

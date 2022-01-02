@@ -9,24 +9,35 @@ LinkedList *BuildNode(char *data) {
     }
     temp->data = (char *) malloc(sizeof(char) * (strlen(data) + 1));
     strcpy(temp->data, data);
+    temp->next = NULL;
     return temp;
 }
 
-LinkedList *addToStart(LinkedList *n, char *s) {
+LinkedList *addToEnd(LinkedList *n, char *s) {
 //    printf("Adding '%s' to the start of the list\n", s);
-    LinkedList *t = BuildNode(s);
-    t->next = n;
-    return t;
+if (n == NULL) {
+    return BuildNode(s);
+}
+LinkedList * temp = n;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = BuildNode(s);
+    return n;
 }
 
 LinkedList *FreeList(LinkedList *l) {
     printf("Freeing the list that starts with '%s'\n", l->data);
+    if (l == NULL) {
+        return NULL;
+    }
     LinkedList *temp = l;
     while (temp != NULL) {
         LinkedList *next = temp->next;
         free(temp);
         temp = next;
     }
+    return NULL;
 }
 
 LinkedList *DeleteElement(LinkedList *ls, char *str) {
@@ -61,25 +72,19 @@ int isInList(LinkedList *ls, char *str) {
     return 0;
 }
 
-//TODO: This function is not working properly, skips some elements
 LinkedList *MergeLists(LinkedList *ls1, LinkedList *ls2) {
-    LinkedList *temp = ls1;
+    //Merge lists without duplicates
     if (ls1 == NULL)
         return ls2;
-    else if (ls2 == NULL)
-        return ls1;
-
+    LinkedList *temp = ls1;
     while (temp->next != NULL) {
         temp = temp->next;
     }
-
-    while (ls2->next) {
-        if (isInList(ls1, ls2->data)) {
-            ls2 = ls2->next;
-            continue;
+    while (ls2 != NULL) {
+        if (!isInList(ls1, ls2->data)) {
+            temp->next = ls2;
+            temp = temp->next;
         }
-        temp->next = ls2;
-        temp = temp->next;
         ls2 = ls2->next;
     }
     return ls1;

@@ -32,15 +32,15 @@ int isWordInDictionary(HashTable *dictionaryTable, char *word) {
 LinkedList *addSpaceCheck(HashTable *dictionaryTable, char *word) {
 
     LinkedList *list = NULL;
-    char *first = string(strlen(word)), *second = string(strlen(word));
+    char *first = string(strlen(word)), *second = string(strlen(word)), *merge = string(2*strlen(word));
     for (int i = 1; i < strlen(word); i++) {
-        strncpy(first, word, i); //get the first half of the word
-        strncpy(second, word + i, strlen(word) - i); // get the second half of the word
-        if (isWordInDictionary(dictionaryTable, first) && strcmp(first, word) != 0) {
-            addToStart(list, first); //add the first half to the list if it is in the dictionary
-        }
-        if (isWordInDictionary(dictionaryTable, second) && strcmp(second, word) != 0) {
-            list = addToStart(list, second); //add the second half to the list if it is in the dictionary
+        strncpy(first, word, i); first[i] ='\0';//get the first half of the word
+        strncpy(second, word + i, strlen(word) - i); second[strlen(word) - i] = '\0'; // get the second half of the word
+        if (isWordInDictionary(dictionaryTable, first) && isWordInDictionary(dictionaryTable, second)) {
+            strcpy(merge, first);
+            strcat(merge, " ");
+            strcat(merge, second);
+            list = addToEnd(list, merge); //add the first half to the list if it is in the dictionary
         }
     }
     free(first); //free mem
@@ -61,7 +61,7 @@ LinkedList *replaceCharacterCheck(HashTable *dictionaryTable, char *word) {
             char c = 'a' + j; //get the 'a' to 'z' letters
             temp[i] = c; //replace letter at index i
             if (isWordInDictionary(dictionaryTable, temp) && strcmp(temp, word) != 0) {
-                list = addToStart(list, temp); //add the word to the list if it is in the dictionary
+                list = addToEnd(list, temp); //add the word to the list if it is in the dictionary
             }
         }
     }
@@ -81,7 +81,7 @@ LinkedList *deleteCharacterCheck(HashTable *dictionaryTable, char *word) {
         int idxToDel = i; //set the index to delete
         memmove(&temp[idxToDel], &temp[idxToDel + 1], strlen(temp) - idxToDel); //move the letters in mem
         if (isWordInDictionary(dictionaryTable, temp) && strcmp(temp, word) != 0) {
-            list = addToStart(list, temp); //add the word to the list if it is in the dictionary
+            list = addToEnd(list, temp); //add the word to the list if it is in the dictionary
         }
         free(temp); //free mem
     }
@@ -101,7 +101,7 @@ LinkedList *addCharacterCheck(HashTable *dictionaryTable, char *word) {
             temp[i] = 'a' + j; //add the letter to the index i
             strncpy(temp + i + 1, word + i, strlen(word) - i + 1); //append the rest of the word
             if (isWordInDictionary(dictionaryTable, temp) && strcmp(temp, word) != 0) {
-                list = addToStart(list, temp); //add the word to the list if it is in the dictionary
+                list = addToEnd(list, temp); //add the word to the list if it is in the dictionary
             }
         }
     }
@@ -122,7 +122,7 @@ LinkedList *switchAdjacentCharacterCheck(HashTable *dictionaryTable, char *word)
         temp[i] = temp[i + 1]; //replace the letter at index i with the letter at index i + 1
         temp[i + 1] = c; //replace the letter at index i + 1 with the letter at index i
         if (isWordInDictionary(dictionaryTable, temp) && strcmp(temp, word) != 0) {
-            list = addToStart(list, temp); //add the word to the list if it is in the dictionary
+            list = addToEnd(list, temp); //add the word to the list if it is in the dictionary
         }
     }
     free(temp);
@@ -136,10 +136,10 @@ LinkedList *getWordSuggestions(HashTable *dictionaryTable, char *word) {
     }
     int checks = 5;
     LinkedList *suggestions[] = {
+            addSpaceCheck(dictionaryTable,word),
             replaceCharacterCheck(dictionaryTable, word),
             deleteCharacterCheck(dictionaryTable, word),
             addCharacterCheck(dictionaryTable, word),
-            switchAdjacentCharacterCheck(dictionaryTable, word),
             switchAdjacentCharacterCheck(dictionaryTable, word)
     };
     for (int i = 0; i < checks; ++i) {

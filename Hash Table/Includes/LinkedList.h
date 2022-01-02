@@ -15,7 +15,7 @@ void PrintList(LinkedList *);
 
 LinkedList *BuildNode(char *);
 
-LinkedList *addToStart(LinkedList *, char *);
+LinkedList *addToEnd(LinkedList *n, char *s);
 
 LinkedList *FreeList(LinkedList *);
 
